@@ -40,3 +40,38 @@ def testapi():
     return_obj = {}
     return_obj["status"] = "success"
     return json.dumps(return_obj)
+
+# Demonstrating logins
+import flask_login
+from app import User
+from app import users
+
+@app.route('/protected', methods=['GET'])
+@flask_login.login_required
+def protected():
+    return_obj = {}
+    return_obj["status"] = "success"
+    
+    return json.dumps(return_obj)
+
+# Logins
+@app.route('/login', methods=["GET", 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        if request.form.get('pw') == users[username]['pw']:
+            user = User()
+            user.id = username
+            flask_login.login_user(user)
+
+            return render_template('index.html', summary_dict="{}")
+
+        return "Invalid User"
+    else:
+        return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+  flask_login.logout_user()
+
+  return 'Logged out'

@@ -7,3 +7,4 @@ tqdm
 Werkzeug
 Flask-Caching
 peewee
+Flask-Login
